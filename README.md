@@ -5,20 +5,14 @@ As a fullstack / backend developer I have to do:
 
 Develop a simple Forum app with:
 
-  Landing page with all Posts;
-  
-  Post's category;
-  
-  Commenting system;
-  
-  Login/Logout with permission to edit only owned Posts/Comments;
-  
+  1. Landing page with all Posts;
+  2. Post's category;
+  3. Commenting system;
+  4. Login/Logout with permission to edit only owned Posts/Comments;
 
 For this task I implemented a solution using:
 
-  PHP
-  
-  JavaScript
-  
-  mySQL
+  1. PHP
+  2. JavaScript
+  3. mySQL
   
