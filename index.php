@@ -14,7 +14,7 @@
 			<div class = "login" id = "login">
 				<form action="javascript:login()">
 					<label class = "loginLabel">E-mail:</label> <input id = "loginEmail" class = "loginInput" type="text" name="loginEmail">
-					<label class = "loginLabel">Password:</label> <input id = "loginPassword" class = "loginInput" type="text" name="loginPassword">
+					<label class = "loginLabel">Password:</label> <input id = "loginPassword" class = "loginInput" type="password" name="loginPassword">
 					<input class = "loginButton" type="submit" value="Log in">
 				</form>
 			</div>
@@ -51,7 +51,6 @@
 			url: 'php/login.php',
 			data: {action: "logout", userCode: getCookie("userCode")},
 			success: function(output) {
-				console.log(output);
 				var response_logged = output.logged;
 				if (!response_logged) {
 					document.getElementById('errorLabel').style.display = 'none';
