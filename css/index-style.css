@@ -1,0 +1,61 @@
+body {
+	background-color:#e1e1e1;
+}
+.content {
+	z-index: 1;
+	position:relative;
+	margin: 0px 100px; /*top-botton right-left*/
+}
+.header {
+	background-color:#6f79ff;
+}
+.login {
+	padding: 6px;
+	white-space: nowrap;
+	text-align : right;
+}
+.loginButton {
+	font-size:12px;
+	margin:2px;
+	white-space: nowrap;
+}
+.loginButton:hover { 
+	background-color: #fefefe;
+}
+.loginLabel {
+	white-space: nowrap;
+	font-family: helvetica,arial,sans-serif;
+	font-size:12px;
+	font-style: normal;
+	font-variant: normal;
+}
+.logoutLabel {
+	white-space: nowrap;
+	font-family: helvetica,arial,sans-serif;
+	font-size:17px;
+	font-style: normal;
+	font-variant: normal;
+}
+.loginInput {
+	height: 20px;
+	width: 100px;
+}
+.logged {
+	display:none;
+	padding: 6px;
+	white-space: nowrap;
+	text-align : right;
+}
+.postSpace {
+	display:block;
+}
+.errorLabel {
+	display:none;
+	font-family: helvetica,arial,sans-serif;
+	font-size:12px;
+	font-style: normal;
+	font-variant: normal;
+	margin-right:10px;
+	white-space: nowrap;
+	text-align : right;
+}

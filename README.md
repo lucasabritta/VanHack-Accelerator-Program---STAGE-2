@@ -15,4 +15,6 @@ For this task I implemented a solution using:
   1. PHP
   2. JavaScript
   3. mySQL
+  4. HTML
+  5. CSS
   
