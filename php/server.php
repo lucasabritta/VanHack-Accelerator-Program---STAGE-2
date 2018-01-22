@@ -38,16 +38,109 @@ if (isset($_POST['action']) != null and isset($_POST['action']) != "") {
 		} else {
 			$response = array("error"=>true, "errorCode"=> 500, "errorMessage" => "missing mandatory fields to submit the post");
 		}
+	} else if ($action == 'editPost') {
+		if ($_POST['postId'] != "" and $_POST['title'] != "" and $_POST['message'] != "" and $_POST['category'] != "") {
+			if (editPost($_POST['postId'], $_POST['title'], $_POST['message'], $_POST['category'])) {
+				$response = array("error"=>false);
+			} else {
+				$response = array("error"=>true, "errorCode"=> 500, "errorMessage" => "unable to edit the post");
+			}
+		} else {
+			$response = array("error"=>true, "errorCode"=> 500, "errorMessage" => "missing mandatory fields to edit the post");
+		}
 	} else if ($action == 'getPosts') {
-		$response = getPosts($_POST['userCode'], $_POST['offset']);
+		if("" == trim($_POST['offset'])){
+			$offset = '0';
+		} else {
+			$offset = $_POST['offset'];
+		}
+		if("" == trim($_POST['title'])){
+			$title = '';
+		} else {
+			$title = $_POST['title'];
+		}
+		$response = getPosts($_POST['userCode'], $offset, $title);
+	} else if ($action == 'getPostAndComments') {
+		if("" == trim($_POST['postId'])){
+			$response = array("error"=>true, "errorCode"=> 500, "errorMessage" => "missing mandatory fields to submit the post");
+		} else {
+			if("" == trim($_POST['offset'])){
+				$offset = '0';
+			} else {
+				$offset = $_POST['offset'];
+			}
+			$response = getPostAndComments($_POST['userCode'], $offset, $_POST['postId']);
+		}
+	} else if ($action == 'submitComment') {
+		if ($_POST['userCode'] != "" and $_POST['message'] != "" and $_POST['postId'] != "") {
+			if (createComment($_POST['userCode'], $_POST['message'], $_POST['postId'])) {
+				$response = array("error"=>false);
+			} else {
+				$response = array("error"=>true, "errorCode"=> 500, "errorMessage" => "unable to submit the comment");
+			}
+		} else {
+			$response = array("error"=>true, "errorCode"=> 500, "errorMessage" => "missing mandatory fields to comment in the post");
+		}
+	} else if ($action == 'editComment') {
+		if ($_POST['commentId'] != "" and $_POST['message'] != "") {
+			if (editComment($_POST['commentId'], $_POST['message'])) {
+				$response = array("error"=>false);
+			} else {
+				$response = array("error"=>true, "errorCode"=> 500, "errorMessage" => "unable to edit the comment");
+			}
+		} else {
+			$response = array("error"=>true, "errorCode"=> 500, "errorMessage" => "missing mandatory fields to edit one comment");
+		}
 	}
 	echo json_encode($response);
 }
-function getPosts($userCode, $offset) {
+function createComment($userCode, $message, $postId) {
+	date_default_timezone_set("Brazil/East");
+	$datetime = date('Y-m-d H:i:s');
+	$created = false;
+	include "../db.php";
+	$conn = new mysqli($host, $userName, $password, $dbName);
+	$selectUsers = "SELECT email FROM user WHERE code = '".$userCode."'";
+	$result = $conn->query($selectUsers);
+	if ($row = $result->fetch_assoc()) {
+		$email = $row["email"];
+		$sql2 = "INSERT INTO commentary (postId, userId, createdDate, commentary) VALUES ('".$postId."', '".$email."', '".$datetime."', '".$message."')";
+		if($conn->query($sql2)){
+			$created = true;
+		}
+	}
+	mysqli_close($conn);
+	return $created;
+}
+function getPostAndComments($userCode, $offset, $postId) {
 	$response = array();
 	include "../db.php";
 	$conn = new mysqli($host, $userName, $password, $dbName);
-	$select = "SELECT P.id, P.title, P.category, P.message, P.createdDate, U.code, U.name FROM post P INNER JOIN user U ON U.email = P.userId ORDER BY P.id ASC LIMIT 10 OFFSET $offset";
+	$select = "SELECT P.id, P.title, P.category, P.message, P.createdDate, U.code, U.name FROM post P INNER JOIN user U ON U.email = P.userId WHERE P.id = '$postId'";
+	$result = $conn->query($select);
+	if ($result->num_rows > 0) {
+		$row = $result->fetch_assoc();
+		$isEditable = $userCode == "" ? false : $row['code'] == $userCode;
+		$post = array("id" => $row['id'], "title" => $row['title'], "category" => $row['category'], "message" => $row['message'], "createdDate" => $row['createdDate'], "createdBy" => $row['name'], "isEditable" => $isEditable);
+		array_push($response, $post);
+	}
+	$select = "SELECT C.id, C.createdDate, C.commentary, U.name, U.code FROM commentary C INNER JOIN user U ON U.email = C.userId WHERE C.postId = '$postId' ORDER BY C.createdDate ASC";
+	$result = $conn->query($select);
+	if ($result->num_rows > 0) {
+		while($row = $result->fetch_assoc()) {
+			$isEditable = $userCode == "" ? false : $row['code'] == $userCode;
+			$comment = array("id" => $row['id'], "createdDate" => $row['createdDate'], "commentary" => $row['commentary'], "userName" => $row['name'], "isEditable" => $isEditable);
+			array_push($response, $comment);
+		}
+	}
+	mysqli_close($conn);
+	return $response;
+}
+function getPosts($userCode, $offset, $title) {
+	$response = array();
+	include "../db.php";
+	$conn = new mysqli($host, $userName, $password, $dbName);
+	$select = "SELECT P.id, P.title, P.category, P.message, P.createdDate, U.code, U.name FROM post P INNER JOIN user U ON U.email = P.userId WHERE P.title LIKE '%$title%' ORDER BY P.id ASC";
 	$result = $conn->query($select);
 	if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
@@ -58,6 +151,28 @@ function getPosts($userCode, $offset) {
 	}
 	mysqli_close($conn);
 	return $response;
+}
+function editPost($postId, $title, $message, $category) {
+	$updated = false;
+	include "../db.php";
+	$conn = new mysqli($host, $userName, $password, $dbName);
+	$update ="UPDATE post SET title = '$title', category = '$category', message = '$message' WHERE id = '".$postId."';";
+	if($conn->query($update)) {
+		$updated = true;
+	}
+	mysqli_close($conn);
+	return $updated;
+}
+function editComment($commentId, $message) {
+	$updated = false;
+	include "../db.php";
+	$conn = new mysqli($host, $userName, $password, $dbName);
+	$update ="UPDATE commentary SET commentary = '$message' WHERE id = '".$commentId."';";
+	if($conn->query($update)) {
+		$updated = true;
+	}
+	mysqli_close($conn);
+	return $updated;
 }
 function createPost($userCode, $title, $message, $category) {
 	date_default_timezone_set("Brazil/East");
@@ -73,7 +188,6 @@ function createPost($userCode, $title, $message, $category) {
 		if($conn->query($sql2)){
 			$created = true;
 		}
-		
 	}
 	mysqli_close($conn);
 	return $created;
