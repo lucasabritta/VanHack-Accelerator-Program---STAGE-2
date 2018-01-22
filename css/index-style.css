@@ -22,6 +22,14 @@ body {
 .loginButton:hover { 
 	background-color: #fefefe;
 }
+.submitPostButton {
+	font-size:18px;
+	padding:2px;
+	white-space: nowrap;
+}
+.submitPostButton:hover { 
+	background-color: #fefefe;
+}
 .loginLabel {
 	white-space: nowrap;
 	font-family: helvetica,arial,sans-serif;
@@ -46,6 +54,11 @@ body {
 	white-space: nowrap;
 	text-align : right;
 }
+.createPost {
+	display:none;
+	white-space: nowrap;
+	text-align : right;
+}
 .postSpace {
 	display:block;
 }
@@ -58,4 +71,81 @@ body {
 	margin-right:10px;
 	white-space: nowrap;
 	text-align : right;
+}
+.errorPostLabel {
+	display:none;
+	font-family: helvetica,arial,sans-serif;
+	font-size:12px;
+	font-style: normal;
+	font-variant: normal;
+	margin-top:10px;
+	white-space: nowrap;
+	text-align : left;
+}
+.postInfo {
+	display:none;
+}
+.postInfoLabel{
+	font-family: helvetica,arial,sans-serif;
+	font-size:12px;
+	font-style: normal;
+	font-variant: normal;
+	margin-right:10px;
+	white-space: nowrap;
+	text-align : right;
+}
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+.postList {
+	padding:0px 10px;
+}
+.postListTable {
+	width:100%;
+	padding:10%;
+	margin-bottom:20px;
+	text-align:left;
+	border: 1px solid black;
+	background-color: #f1f1f1;
+}
+.postListTableTitle {
+	height:30px;
+}
+.postListTableMessage {
+	height:100px;
+}
+.postListTableFooter {
+	font-size:10px;
+}
+.postListTableTD {
+	padding-left:5px;
 }

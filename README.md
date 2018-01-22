@@ -18,3 +18,8 @@ For this task I implemented a solution using:
   4. HTML
   5. CSS
   
+#TODO
+
+1. create a commenting system;
+2. search;
+3. Editing post and commentary;
