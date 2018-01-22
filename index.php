@@ -173,7 +173,6 @@
 				}
 			},
 			error: function(output) {
-				console.log(output);
 				var errorLabel = document.getElementById('errorCommentLabel');
 				errorLabel.style.display = 'block';
 				errorLabel.innerHTML  = "An error occurred while trying to submit a comment, please try again later";
@@ -501,7 +500,9 @@
 	}
 	function login() {
 		var email = document.getElementById('loginEmail').value;
+		document.getElementById('loginEmail').value = "";
 		var password = document.getElementById('loginPassword').value;
+		document.getElementById('loginPassword').value = "";
 		$.ajax({
 			type: 'post',
 			dataType : "json",
