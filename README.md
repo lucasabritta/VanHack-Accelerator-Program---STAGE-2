@@ -17,9 +17,17 @@ For this task I implemented a solution using:
   3. mySQL
   4. HTML
   5. CSS
-  
+  6. Bootstrap
+  7. Jquery
+  8. Ajax
+  9. JSON
+
 #TODO
 
 1. more security
 2. better UI
 3. limit of post/commentary per page
+
+#Explanation video
+
+https://youtu.be/hNBR1QK4koc
