@@ -28,6 +28,3 @@ For this task I implemented a solution using:
 2. better UI
 3. limit of post/commentary per page
 
-#Explanation video
-
-https://youtu.be/hNBR1QK4koc
